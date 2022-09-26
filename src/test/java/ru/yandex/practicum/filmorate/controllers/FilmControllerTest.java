@@ -25,7 +25,7 @@ class FilmControllerTest {
 
     private FilmController filmController;
 
-    private static final LocalDate RELEASE_DATE_TEST = LocalDate.of(1894, 1, 1);
+    private static final LocalDate RELEASE_DATE_TEST = LocalDate.of(1999, 1, 1);
 
     @BeforeEach
     void beforeEach() {
