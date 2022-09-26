@@ -25,6 +25,8 @@ class FilmControllerTest {
 
     private FilmController filmController;
 
+    private static final LocalDate RELEASE_DATE_TEST = LocalDate.of(1894, 1, 1);
+
     @BeforeEach
     void beforeEach() {
         filmController = new FilmController();
@@ -34,7 +36,7 @@ class FilmControllerTest {
         return Film.builder()
                 .name("Matrix")
                 .description("follow the White rabbit")
-                .releaseDate(LocalDate.of(1999, 1, 1))
+                .releaseDate(RELEASE_DATE_TEST)
                 .duration(160)
                 .build();
 

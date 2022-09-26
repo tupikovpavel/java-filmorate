@@ -1,22 +1,25 @@
 package ru.yandex.practicum.filmorate.controllers;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.cglib.core.Local;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 
+import javax.validation.Valid;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 @RestController
 @RequestMapping("/films")
+@Slf4j
 public class FilmController {
 
-    private static final Logger log = LoggerFactory.getLogger(FilmController.class);
+    private static final LocalDate BIRTHDATE_OF_CINEMA = LocalDate.of(1895, Month.DECEMBER, 28);
     private final Map<Integer, Film> films = new HashMap<>();
 
     protected int idCounter = 0;
@@ -28,7 +31,7 @@ public class FilmController {
     }
 
     @PostMapping()
-    public Film create(@RequestBody Film film) {
+    public Film create(@Valid @RequestBody Film film) {
         validate(film);
         idCounter++;
         film.setId(idCounter);
@@ -38,7 +41,7 @@ public class FilmController {
     }
 
     @PutMapping()
-    public Film update(@RequestBody Film film) {
+    public Film update(@Valid @RequestBody Film film) {
         if (!films.containsKey(film.getId())) {
             log.warn("Список фильмов не содержит {}", film.toString());
             throw new ValidationException("В списке фильм не найден");
@@ -50,7 +53,7 @@ public class FilmController {
     }
 
     private void validate(Film film) {
-        if ((film.getName() == null) || (film.getName().isEmpty())) {
+        if ((film.getName() == null) || (film.getName().isBlank())) {
             log.warn("Не указано название фильма {}", film.toString());
             throw new ValidationException("Не указано название фильма");
         }
@@ -58,7 +61,7 @@ public class FilmController {
             log.warn("Описание фильма {} содержит более 200 символов", film.toString());
             throw new ValidationException("Описание фильма содержит более 200 символов");
         }
-        if (film.getReleaseDate().isBefore(LocalDate.of(1895, Month.DECEMBER, 28))) {
+        if (film.getReleaseDate().isBefore(BIRTHDATE_OF_CINEMA)) {
             log.warn("У фильма {} указана дата релиза раньше, чем 28.12.1895", film.toString());
             throw new ValidationException("Указана дата релиза раньше, чем 28.12.1895");
         }
