@@ -39,46 +39,10 @@ class UserControllerTest {
     }
 
     @Test
-    public void shouldThrowValidationExceptionWhenEmailEmpty() {
-        User user = getUser();
-        user.setEmail("");
-        assertThrows(ValidationException.class, () -> userController.create(user), "Не указан почтовый ящик");
-    }
-
-    @Test
-    public void shouldThrowValidationExceptionWhenEmailNotContainNeededSymbols() {
-        User user = getUser();
-        user.setEmail("mailmail.ru");
-        assertThrows(ValidationException.class, () -> userController.create(user), "Почтовый ящик не содержит символ @");
-    }
-
-    @Test
-    public void shouldThrowValidationExceptionWhenLoginEmpty() {
-        User user = getUser();
-        user.setLogin("");
-        assertThrows(ValidationException.class, () -> userController.create(user), "Не указан логин");
-    }
-
-    @Test
     public void shouldThrowValidationExceptionWhenLoginContainsSpace() {
         User user = getUser();
         user.setLogin("dolore ullamco");
         assertThrows(ValidationException.class, () -> userController.create(user), "Логин содержит пробелы");
-    }
-
-    @Test
-    public void shouldThrowValidationExceptionWhenNameEmpty() {
-        User user = getUser();
-        user.setName("");
-        userController.create(user);
-        assertEquals(user.getLogin(), user.getName());
-    }
-
-    @Test
-    public void shouldThrowValidationExceptionWhenBirthdayInFuture() {
-        User user = getUser();
-        user.setBirthday(LocalDate.of(2023, 1, 1));
-        assertThrows(ValidationException.class, () -> userController.create(user), "Дата рождения не может быть в будущем");
     }
 
     @Test

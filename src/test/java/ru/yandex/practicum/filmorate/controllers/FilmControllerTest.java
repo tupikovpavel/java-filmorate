@@ -51,38 +51,10 @@ class FilmControllerTest {
     }
 
     @Test
-    public void shouldThrowValidationExceptionWhenNameEmpty() {
-        Film film = getFilm();
-        film.setName("");
-        assertThrows(ValidationException.class, () -> filmController.create(film), "Не указано название фильма");
-    }
-
-    @Test
-    public void shouldThrowValidationExceptionWhenDescriptionLongerThan200Symbols() {
-        Film film = getFilm();
-        StringBuilder sb = new StringBuilder();
-        sb.append("follow the White rabbit follow the White rabbit follow the White rabbit follow the White rabbit")
-                .append("follow the White rabbit follow the White rabbit follow the White rabbit follow the White rabbit")
-                .append("follow the White rabbit follow the White rabbit follow the White rabbit follow the White rabbit")
-                .append("follow the White rabbit follow the White rabbit follow the White rabbit follow the White rabbit")
-                .append("follow the White rabbit follow the White rabbit follow the White rabbit follow the White rabbit")
-                .append("follow the White rabbit follow the White rabbit follow the White rabbit follow the White rabbit");
-        film.setDescription(sb.toString());
-        assertThrows(ValidationException.class, () -> filmController.create(film), "Описание фильма содержит более 200 символов");
-    }
-
-    @Test
     public void shouldThrowValidationExceptionWhenReleaseDateBefore1895() {
         Film film = getFilm();
         film.setReleaseDate(LocalDate.of(1894, 1, 1));
         assertThrows(ValidationException.class, () -> filmController.create(film), "Указана дата релиза раньше, чем 28.12.1895");
-    }
-
-    @Test
-    public void shouldThrowValidationExceptionWhenDurationNegative() {
-        Film film = getFilm();
-        film.setDuration(-10);
-        assertThrows(ValidationException.class, () -> filmController.create(film), "Продолжительность фильма должна быть положительная");
     }
 
     @Test

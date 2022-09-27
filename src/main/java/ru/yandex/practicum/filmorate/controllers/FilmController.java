@@ -42,32 +42,21 @@ public class FilmController {
 
     @PutMapping()
     public Film update(@Valid @RequestBody Film film) {
+        validate(film);
         if (!films.containsKey(film.getId())) {
             log.warn("Список фильмов не содержит {}", film.toString());
             throw new ValidationException("В списке фильм не найден");
         }
-        validate(film);
         films.put(film.getId(), film);
         log.debug("Добавленный фильм {}",film.toString());
         return film;
     }
 
     private void validate(Film film) {
-        if ((film.getName() == null) || (film.getName().isBlank())) {
-            log.warn("Не указано название фильма {}", film.toString());
-            throw new ValidationException("Не указано название фильма");
-        }
-        if (film.getDescription().length()>200) {
-            log.warn("Описание фильма {} содержит более 200 символов", film.toString());
-            throw new ValidationException("Описание фильма содержит более 200 символов");
-        }
+
         if (film.getReleaseDate().isBefore(BIRTHDATE_OF_CINEMA)) {
             log.warn("У фильма {} указана дата релиза раньше, чем 28.12.1895", film.toString());
             throw new ValidationException("Указана дата релиза раньше, чем 28.12.1895");
-        }
-        if (film.getDuration() <= 0) {
-            log.warn("У фильма {} указана некорректная продолжительность", film.toString());
-            throw new ValidationException("Продолжительность фильма должна быть положительная");
         }
     }
 
