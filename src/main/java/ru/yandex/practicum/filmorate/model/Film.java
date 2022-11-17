@@ -7,6 +7,7 @@ import lombok.Value;
 
 import javax.validation.constraints.*;
 import java.time.LocalDate;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -23,4 +24,17 @@ public class Film {
     @Positive
     private long duration;
 
+    private Set<Long> likes;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public Set<Long> getLikes() {
+        return likes;
+    }
+
+    public void setLikes(Set<Long> likes) {
+        this.likes = likes;
+    }
 }

@@ -1,22 +1,15 @@
 package ru.yandex.practicum.filmorate.controllers;
 
-import com.google.gson.Gson;
-import com.sun.net.httpserver.HttpServer;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.service.FilmService;
+import ru.yandex.practicum.filmorate.service.UserService;
+import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
+import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
 
-import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.time.LocalDate;
-import java.time.Month;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -27,9 +20,14 @@ class FilmControllerTest {
 
     private static final LocalDate RELEASE_DATE_TEST = LocalDate.of(1999, 1, 1);
 
+
     @BeforeEach
     void beforeEach() {
-        filmController = new FilmController();
+        InMemoryFilmStorage inMemoryFilmStorage = new InMemoryFilmStorage();
+        InMemoryUserStorage inMemoryUserStorage = new InMemoryUserStorage();
+        UserService userService = new UserService(inMemoryUserStorage);
+        FilmService filmService = new FilmService(inMemoryFilmStorage, userService);
+        filmController = new FilmController(filmService);
     }
 
     private Film getFilm() {

@@ -1,66 +1,63 @@
 package ru.yandex.practicum.filmorate.controllers;
 
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.service.UserService;
 
 import javax.validation.Valid;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/users")
 @Slf4j
 public class UserController {
 
-    private final Map<Integer, User> users = new HashMap<>();
+    private final UserService userService;
 
-    protected int idCounter = 0;
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping()
     public List<User> findAll() {
-        log.debug("Текущее количество пользователей: {}", users.size());
-        return new ArrayList<>(users.values());
+        return userService.findAll();
     }
 
     @PostMapping()
     public User create(@Valid @RequestBody User user) {
-        validate(user);
-        idCounter++;
-        user.setId(idCounter);
-        users.put(user.getId(), user);
-        log.debug("Добавленный пользователь {}",user.toString());
-        return user;
+        return userService.create(user);
     }
 
     @PutMapping()
     public User update(@Valid @RequestBody User user) {
-        validate(user);
-        if (!users.containsKey(user.getId())) {
-            log.warn("Список пользователей не содержит {}", user.toString());
-            throw new ValidationException("В списке пользователь не найден");
-        }
-        users.put(user.getId(), user);
-        return user;
+        return userService.update(user);
     }
 
-    private void validate(User user) {
-
-        String login = user.getLogin();
-        if (login.contains(" ")) {
-            log.warn("Логин у пользователя {} содержит пробелы", user.toString());
-            throw new ValidationException("Логин содержит пробелы");
-        }
-        if ((user.getName() == null) || (user.getName().isBlank())){
-            user.setName(login);
-        }
-
+    @GetMapping("/{id}")
+    public User findUserById(@PathVariable("id") Integer id) {
+        return userService.findUserById(id);
     }
+
+    @PutMapping("/{id}/friends/{friendId}")
+    public User update(@PathVariable("id") Integer id, @PathVariable("friendId") Integer friendId) {
+        return userService.addUserFriend(id, friendId);
+    }
+
+    @DeleteMapping("/{id}/friends/{friendId}")
+    public User delete(@PathVariable("id") Integer id, @PathVariable("friendId") Integer friendId) {
+        return userService.removeUserFriend(id, friendId);
+    }
+
+    @GetMapping("/{id}/friends")
+    public List<User> findAll(@PathVariable("id") Integer id) {
+        return userService.findAllFriends(id);
+    }
+
+    @GetMapping("/{id}/friends/common/{otherId}")
+    public List<User> findCommonFriends(@PathVariable("id") Integer id, @PathVariable("otherId") Integer otherId) {
+        return userService.findCommonFriends(id, otherId);
+    }
+
 
 }

@@ -9,6 +9,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PastOrPresent;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -25,5 +27,19 @@ public class User {
     @NotNull
     @PastOrPresent
     private LocalDate birthday;
+
+    private Set<Integer> friends;
+
+    public void setFriends(Set<Integer> friends) {
+        this.friends = friends;
+    }
+
+    public Set<Integer> getFriends() {
+        return friends;
+    }
+
+    public Integer getId() {
+        return id;
+    }
 
 }
