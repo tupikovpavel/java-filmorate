@@ -2,6 +2,7 @@ package ru.yandex.practicum.filmorate.controllers;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import ru.yandex.practicum.filmorate.exceptions.FilmNotFoundException;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmService;
@@ -61,6 +62,6 @@ class FilmControllerTest {
         filmController.create(film);
         Film updatedFilm = getFilm();
         updatedFilm.setId(0);
-        assertThrows(ValidationException.class, () -> filmController.update(updatedFilm), "В списке фильм не найден");
+        assertThrows(FilmNotFoundException.class, () -> filmController.update(updatedFilm), "В списке фильм не найден");
     }
 }
