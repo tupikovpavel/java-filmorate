@@ -14,7 +14,6 @@ import java.util.*;
 @Slf4j
 public class InMemoryFilmStorage implements FilmStorage {
 
-    private static final LocalDate BIRTHDATE_OF_CINEMA = LocalDate.of(1895, Month.DECEMBER, 28);
     private final Map<Integer, Film> films = new HashMap<>();
 
     protected int idCounter = 0;
@@ -27,7 +26,6 @@ public class InMemoryFilmStorage implements FilmStorage {
 
     @Override
     public Film create(Film film) {
-        validate(film);
         idCounter++;
         film.setId(idCounter);
         film.setLikes(new HashSet<>());
@@ -38,7 +36,6 @@ public class InMemoryFilmStorage implements FilmStorage {
 
     @Override
     public Film update(Film film) {
-        validate(film);
         if (!films.containsKey(film.getId())) {
             log.warn("Список фильмов не содержит {}", film.toString());
             throw new FilmNotFoundException("В списке фильм не найден");
@@ -53,21 +50,15 @@ public class InMemoryFilmStorage implements FilmStorage {
 
     @Override
     public void delete(Film film) {
-        validate(film);
         if (!films.containsKey(film.getId())) {
             log.warn("Список фильмов не содержит {}", film.toString());
-            throw new FilmNotFoundException("В списке фильм не найден");
+            throw new FilmNotFoundException("В списке фильм не найден "+film.toString());
         }
         films.remove(film);
     }
 
-
-    private void validate(Film film) {
-
-        if (film.getReleaseDate().isBefore(BIRTHDATE_OF_CINEMA)) {
-            log.warn("У фильма {} указана дата релиза раньше, чем 28.12.1895", film.toString());
-            throw new ValidationException("Указана дата релиза раньше, чем 28.12.1895");
-        }
+    @Override
+    public Optional<Film> findById(Integer filmId) {
+        return Optional.ofNullable(films.get(filmId));
     }
-
 }

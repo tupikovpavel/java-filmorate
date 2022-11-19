@@ -1,12 +1,14 @@
 package ru.yandex.practicum.filmorate.controllers;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exceptions.IncorrectParameterException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
 import java.util.List;
 
 @RestController
@@ -37,8 +39,8 @@ public class FilmController {
 
 
     @GetMapping("/{id}")
-    public Film findFilmById(@PathVariable("id") Integer id) {
-        return filmService.findFilmById(id);
+    public Film findById(@PathVariable("id") Integer id) {
+        return filmService.findById(id);
     }
 
     @PutMapping("/{id}/like/{userId}")
@@ -47,16 +49,16 @@ public class FilmController {
     }
 
     @DeleteMapping("/{id}/like/{userId}")
-    public Film delete(@PathVariable("id") Integer id, @PathVariable("userId") Integer userId) {
+    public Film removeLike(@PathVariable("id") Integer id, @PathVariable("userId") Integer userId) {
         return filmService.removeLike(id, userId);
     }
 
     @GetMapping("/popular")
-    public List<Film> findAll(@RequestParam(value = "count", defaultValue = "10", required = false) Integer count) {
+    @Validated
+    public List<Film> findAll(@RequestParam(value = "count", defaultValue = "10", required = false) @Positive Integer count) {
         if (count <= 0) {
             throw new IncorrectParameterException("count");
         }
-
         return filmService.findAll(count);
     }
 

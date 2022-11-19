@@ -18,7 +18,7 @@ import java.util.Set;
 public class User {
 
     private int id;
-    @NotBlank
+    @NotNull
     @Email
     private String email;
     @NotBlank
