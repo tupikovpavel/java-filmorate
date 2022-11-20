@@ -10,7 +10,7 @@ public interface UserStorage {
 
     User update(User user);
 
-    void delete(User user);
+    void delete(Integer userId);
 
     List<User> findAll();
 

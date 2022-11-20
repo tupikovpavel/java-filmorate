@@ -49,12 +49,12 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     @Override
-    public void delete(Film film) {
-        if (!films.containsKey(film.getId())) {
-            log.warn("Список фильмов не содержит {}", film.toString());
-            throw new FilmNotFoundException("В списке фильм не найден "+film.toString());
+    public void delete(Integer filmId) {
+        if (!films.containsKey(filmId)) {
+            log.warn("Список фильмов не содержит {}", filmId);
+            throw new FilmNotFoundException("В списке фильм не найден "+filmId);
         }
-        films.remove(film);
+        films.remove(filmId);
     }
 
     @Override

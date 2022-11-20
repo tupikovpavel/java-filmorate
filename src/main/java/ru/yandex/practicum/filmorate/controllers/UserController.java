@@ -3,12 +3,12 @@ package ru.yandex.practicum.filmorate.controllers;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.UserService;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/users")
@@ -25,11 +25,13 @@ public class UserController {
 
     @PostMapping()
     public User create(@Valid @RequestBody User user) {
+        validate(user);
         return userService.create(user);
     }
 
     @PutMapping()
     public User update(@Valid @RequestBody User user) {
+        validate(user);
         return userService.update(user);
     }
 
@@ -39,12 +41,12 @@ public class UserController {
     }
 
     @PutMapping("/{id}/friends/{friendId}")
-    public User update(@PathVariable("id") Integer id, @PathVariable("friendId") Integer friendId) {
+    public User addFriend(@PathVariable("id") Integer id, @PathVariable("friendId") Integer friendId) {
         return userService.addFriend(id, friendId);
     }
 
     @DeleteMapping("/{id}/friends/{friendId}")
-    public User delete(@PathVariable("id") Integer id, @PathVariable("friendId") Integer friendId) {
+    public User removeFriend(@PathVariable("id") Integer id, @PathVariable("friendId") Integer friendId) {
         return userService.removeFriend(id, friendId);
     }
 
@@ -58,5 +60,17 @@ public class UserController {
         return userService.findCommonFriends(id, otherId);
     }
 
+    private void validate(User user) {
+
+        String login = user.getLogin();
+        if (login.contains(" ")) {
+            log.warn("Логин у пользователя {} содержит пробелы", user.toString());
+            throw new ValidationException("Логин содержит пробелы");
+        }
+        if ((user.getName() == null) || (user.getName().isBlank())){
+            user.setName(login);
+        }
+
+    }
 
 }
