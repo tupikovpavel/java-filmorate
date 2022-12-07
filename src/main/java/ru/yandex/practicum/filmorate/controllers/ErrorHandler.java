@@ -21,49 +21,49 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleIncorrectParameterException(final IncorrectParameterException e) {
-        log.warn("Ошибка с полем "+e.getMessage());
+        log.warn("Ошибка с полем {}", e.getMessage());
         return new ErrorResponse("Ошибка с полем "+e.getMessage());
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleValidationException(final ValidationException e) {
-        log.warn("Ошибка проверки "+e.getMessage());
+        log.warn("Ошибка проверки {}", e.getMessage());
         return new ErrorResponse(e.getMessage());
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleFilmNotFoundException(final FilmNotFoundException e) {
-        log.warn("Ошибка при поиске фильма "+e.getMessage());
+        log.warn("Ошибка при поиске фильма {}", e.getMessage());
         return new ErrorResponse(e.getMessage());
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleUserNotFoundException(final UserNotFoundException e) {
-        log.warn("Ошибка при поиске пользователя "+e.getMessage());
+        log.warn("Ошибка при поиске пользователя {}", e.getMessage());
         return new ErrorResponse(e.getMessage());
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse handleThrowable(final Throwable e) {
-        log.warn("Возникло исключение "+e.getMessage());
+        log.warn("Возникло исключение {}", e.getMessage());
         return new ErrorResponse("Произошла непредвиденная ошибка.");
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleMethodArgumentNotValidException(final MethodArgumentNotValidException e) {
-        log.warn("Ошибка в данных пользователя "+e.getMessage());
+        log.warn("Ошибка в данных пользователя {}", e.getMessage());
         return new ErrorResponse("Ошибка в данных пользователя "+e.getMessage());
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleConstraintViolationException(final ConstraintViolationException e){
-        log.warn("Ошибка в данных пользователя "+e.getMessage());
+        log.warn("Ошибка в данных пользователя {}", e.getMessage());
         return new ErrorResponse("Ошибка в данных пользователя "+e.getMessage());
     }
 

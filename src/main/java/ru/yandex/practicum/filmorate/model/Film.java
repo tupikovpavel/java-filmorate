@@ -24,6 +24,8 @@ public class Film {
     private LocalDate releaseDate;
     @Positive
     private long duration;
+    private int genreId;
+    private int ratingId;
 
     private Set<Long> likes;
 

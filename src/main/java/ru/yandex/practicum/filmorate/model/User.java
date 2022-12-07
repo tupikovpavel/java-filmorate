@@ -27,9 +27,8 @@ public class User {
     @NotNull
     @PastOrPresent
     private LocalDate birthday;
-
     private Set<Integer> friends;
-
+    private FriendshipStatus friendshipStatus;
     public void setFriends(Set<Integer> friends) {
         this.friends = friends;
     }
